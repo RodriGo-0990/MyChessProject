@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>MyChessProject</title>
+    <!--titulo da aba-->
+
+    <!--imagem favicon-->
+    <link rel="shortcut icon" href="img/horse.png" type="image/x-icon">
+
+</head>
+
+<body onload="desabilitarPlay()">
+
+    <!--cabeçalho-->
+    <header>
+        <div class="center">
+
+            <!--logo-->
+            <div class="logo">
+                <a href="index.html">
+                    <img src="img/horse.png" alt="logo">
+                </a>
+            </div>
+
+            <!--titulo-->
+            <div class="titulo">MyChessProject</div>
+
+            <!--menu-->
+            <div class="menu">
+                <a href="index.html">Inicio</a>
+                <a href="outrosProjetos.html">Outros Projetos</a>
+                <a href="#">Jogar</a>
+            </div>
+        </div>
+    </header>
+
+
+    <!--conteúdo principal-->
+    <section class="info">
+
+        <div class="screen">
+
+            <div style="display: none;">
+                <!--peças negras-->
+                <img src="img/peças_negras/Black_Bishop.ico" class="pieces" id="blackBishop">
+                <img src="img/peças_negras/black_Knight.ico" class="pieces" id="blackKnight">
+                <img src="img/peças_negras/black_Castle.ico" class="pieces" id="blackCastle">
+                <img src="img/peças_negras/King.ico" class="pieces" id="blackking">
+                <img src="img/peças_negras/Queen.ico" class="pieces" id="blackQueen">
+                <img src="img/peças_negras/black_Pone.ico" class="pieces" id="blackPone">
+
+                <!--peças brancas-->
+                <img src="img/peças_brancas/white_Bishop.ico" class="pieces" id="whiteBishop">
+                <img src="img/peças_brancas/white_Knight.ico" class="pieces" id="whiteKnight">
+                <img src="img/peças_brancas/white_Castle.ico" class="pieces" id="whiteCastle">
+                <img src="img/peças_brancas/white_King.ico" class="pieces" id="whiteking">
+                <img src="img/peças_brancas/White_Queen.ico" class="pieces" id="whiteQueen">
+                <img src="img/peças_brancas/white_Pone.ico" class="pieces" id="whitePone">
+            </div>
+
+            <canvas class="canvas" id="canvas"></canvas>
+            <div class="time">
+                <div>
+                    <p class="tempo" id="tempo1">tempo1</p>
+                </div>
+                <div>
+                    <p class="tempo" id="tempo2">tempo2</p>
+                </div>
+            </div>
+
+            <div class="options">
+
+                <p id="vez"> escolha a cor das peças. </p>
+                <input class="input" type="radio" id="brancas" name="opcao" onclick="escolherCor(this.id)">
+                <label>Brancas</label>
+                <input class="input" type="radio" id="negras" name="opcao" onclick="escolherCor(this.id)">
+                <label>Pretas</label>
+
+                <input type="button" class="play" id="play" value="Jogar" onclick="play()">
+            </div>
+
+    </section>
+    <!--fim do conteudo-->
+
+    <!--rodapé-->
+    <footer>
+        <div class="email">
+            <p>rodrigorodrigues0990@hotmail.com <br> <a href="https://wa.me/5548998330229" target="blank">(48)998330229.
+                    <img src="img/whatsapp-icon.png" alt="whatsapp-icon">
+            </p>
+        </div>
+        <div class="divIcons">
+            <div class="contatoIcon">
+                <a href="https://github.com/RodriGo-0990" target="blank"> <img src="img/github-icon.png"
+                        alt="github-icon" title="Github"></a>
+            </div>
+            <div class="contatoIcon">
+                <a href="https://www.instagram.com/rodrigo_rodrigues0990/" target="blank"> <img
+                        src="img/Instagram-icon.png" alt="instagram-icon" title="Instagram"></a>
+            </div>
+            <div class="contatoIcon">
+                <a href="https://www.linkedin.com/in/rodrigo-rodrigues-7478491b3/" target="blank"> <img
+                        src="img/Linkedin-icon.png" alt="linkedin-icon" title="Lindin"></a>
+            </div>
+        </div>
+    </footer>
+    <!--rodapé-->
+
+
+
+
+    <script src="javaScript/animações.js"></script>
+
+</body>
+
+</html>
