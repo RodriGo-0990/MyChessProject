@@ -11,6 +11,7 @@ const colorgreen = "#70f24885";
 const colorred = "#cb343475";
 const colorgrey = "#6d6315b5";
 const colorinv = "#f1f1f104";
+const coloryellow = "#ece675ab";
 
 class casas {
     constructor(x, y) {
@@ -21,21 +22,24 @@ class casas {
         this.isFill = false;
         this.piece = null;
         this.set = false;
-    } print(ctx, color) {
+    }
+    print(ctx, color) {
         ctx.strokeStyle = color;
         ctx.rect(this.x, this.y, this.width, this.height);
         ctx.stroke();
-    } placePiece(obj) {
+    }
+    placePiece(obj) {
         this.piece = obj;
         this.isFill = true;
 
-    } printFull(ctx, color) {
+    }
+    printFull(ctx, color) {
         ctx.fillStyle = color;
         ctx.fillRect(this.x + 1, this.y + 1, this.width, this.height);
         ctx.fill();
 
-    } clear(ctx) {
-
+    }
+    clear(ctx) {
         ctx.clearRect(this.x, this.y, 35, 19);
     }
     calcDistance(mouseX, mouseY) {
@@ -49,14 +53,16 @@ class casas {
             return false;
         }
     }
-
+    setSetted(set) {
+        this.set = set;
+    }
     isFilled() {
         return this.isFill;
     }
     getPiece() {
         return this.piece;
     }
-    getSetted(){
+    getSetted() {
         return this.set;
     }
 }
@@ -105,13 +111,13 @@ function render(ctx, invertido) {
     boardgame[54].placePiece(new whitePone(boardgame[54].x, boardgame[54].y)); boardgame[54].getPiece().printPiece(ctx, invertido);
     boardgame[55].placePiece(new whitePone(boardgame[55].x, boardgame[55].y)); boardgame[55].getPiece().printPiece(ctx, invertido);
     boardgame[56].placePiece(new whiteCastle(boardgame[56].x, boardgame[56].y)); boardgame[56].getPiece().printPiece(ctx, invertido);
-    boardgame[57].placePiece(new whiteKnight(boardgame[57].x, boardgame[57].y)); boardgame[57].getPiece().printPiece(ctx, invertido);
+    boardgame[27].placePiece(new whiteKnight(boardgame[27].x, boardgame[27].y)); boardgame[27].getPiece().printPiece(ctx, invertido);
     boardgame[58].placePiece(new whiteBishop(boardgame[58].x, boardgame[58].y)); boardgame[58].getPiece().printPiece(ctx, invertido);
     boardgame[59].placePiece(new whiteQueen(boardgame[59].x, boardgame[59].y)); boardgame[59].getPiece().printPiece(ctx, invertido);
     boardgame[60].placePiece(new whiteKing(boardgame[60].x, boardgame[60].y)); boardgame[60].getPiece().printPiece(ctx, invertido);
-    boardgame[61].placePiece(new whiteBishop(boardgame[61].x, boardgame[61].y)); boardgame[61].getPiece().printPiece(ctx, invertido);
+    boardgame[35].placePiece(new whiteBishop(boardgame[35].x, boardgame[35].y)); boardgame[35].getPiece().printPiece(ctx, invertido);
     boardgame[62].placePiece(new whiteKnight(boardgame[62].x, boardgame[62].y)); boardgame[62].getPiece().printPiece(ctx, invertido);
-    boardgame[63].placePiece(new whiteCastle(boardgame[63].x, boardgame[63].y)); boardgame[63].getPiece().printPiece(ctx, invertido);
+    boardgame[30].placePiece(new whiteCastle(boardgame[30].x, boardgame[30].y)); boardgame[30].getPiece().printPiece(ctx, invertido);
 
 }
 function constRender(ctx, inv) {
@@ -120,18 +126,30 @@ function constRender(ctx, inv) {
     for (let i = 0; i < boardgame.length; i++) {
         if (boardgame[i].getPiece() != null) {
             boardgame[i].getPiece().printPiece(ctx, inv);
-        
+
             if (boardgame[i].getPiece().getSelect()) {
-                boardgame[i].printFull(ctx, colorgreen);
+                boardgame[i].printFull(ctx, coloryellow);
             }
-                if (boardgame[i].getSetted()) {
-                    boardgame[i].printFull(ctx, colorgreen);
-                }
-                    if (boardgame[i].getPiece().getAtacked()) {
-                        boardgame[i].printFull(ctx, colorred);
-                    }
+
+            if (boardgame[i].getPiece().getAtacked()) {
+                boardgame[i].printFull(ctx, colorred);
+            }
+
         } else {
             boardgame[i].clear(ctx);
+        }
+        if (boardgame[i].getSetted()) {
+            boardgame[i].printFull(ctx, colorgreen);
+        }
+    }
+}
+
+function movement(value) {
+    if (value < boardgame.length) {
+        if (boardgame[value].getPiece() == null) {
+            boardgame[value].setSetted(true);
+        } else {
+            boardgame[value].getPiece().atacked = true;
         }
     }
 }
@@ -168,6 +186,7 @@ class whiteCastle extends piece {
         this.y = y;
         this.select = fals;
         this.atacked = fals;
+        this.team = 1;
     }
     getSelect() {
         return this.select;
@@ -184,6 +203,12 @@ class whiteCastle extends piece {
     erasePiece(ctx) {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
+    move(value) {
+        movement(value + 1);
+        movement(value - 1);
+        movement(value + 8);
+        movement(value - 8);
+    }
 }
 
 class whiteKing extends piece {
@@ -192,6 +217,7 @@ class whiteKing extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 1;
     }
     getSelect() {
         return this.select;
@@ -208,6 +234,16 @@ class whiteKing extends piece {
     }
     erasePiece(ctx) {
         ctx.clearRect(this.x, this.y, 35, 18);
+    }
+    move(value) {
+        movement(value + 1);
+        movement(value - 1);
+        movement(value + 8);
+        movement(value - 8);
+        movement(value + 7);
+        movement(value - 7);
+        movement(value + 9);
+        movement(value - 9);
     }
 }
 class whiteBishop extends piece {
@@ -231,6 +267,12 @@ class whiteBishop extends piece {
     }
     erasePiece(ctx) {
         ctx.clearRect(this.x, this.y, 35, 18);
+    }
+    move(value) {
+        movement(value + 7);
+        movement(value - 7);
+        movement(value + 9);
+        movement(value - 9);
     }
 
 }
@@ -256,6 +298,17 @@ class whiteKnight extends piece {
     erasePiece(ctx) {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
+    move(value) {
+        movement(value + 16 - 1);
+        movement(value + 16 + 1);
+        movement(value - 16 + 1);
+        movement(value - 16 - 1);
+
+        movement(value + 8 - 2);
+        movement(value + 8 + 2);
+        movement(value - 8 + 2);
+        movement(value - 8 - 2);
+    }
 }
 class whiteQueen extends piece {
     super(x, y) {
@@ -279,6 +332,17 @@ class whiteQueen extends piece {
     erasePiece(ctx) {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
+    move(value) {
+
+        movement(value + 1);
+        movement(value - 1);
+        movement(value + 8);
+        movement(value - 8);
+        movement(value + 7);
+        movement(value - 7);
+        movement(value + 9);
+        movement(value - 9);
+    }
 }
 class whitePone extends piece {
     super(x, y) {
@@ -286,6 +350,7 @@ class whitePone extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.firstMove = true;
     }
     getSelect() {
         return this.select;
@@ -301,6 +366,14 @@ class whitePone extends piece {
     }
     erasePiece(ctx) {
         ctx.clearRect(this.x, this.y, 35, 18);
+    }
+    move(value) {
+        if (!this.firstMove) {
+            movement(value - 8);
+            movement(value - 16);
+        } else {
+            movement(value - 8);
+        }
     }
 }
 
@@ -490,27 +563,31 @@ function play() {
             }
         }
     })
-
+    let selectedPiece;
+    let valor;
     //select
     canvas.addEventListener("click", (event) => {
         const rect = canvas.getBoundingClientRect();
         let x = (event.clientX - rect.left) * canvas.width / rect.width;
         let y = (event.clientY - rect.top) * canvas.height / rect.height;
 
-        constRender(context, invertido);
+
         for (i = 0; i < boardgame.length; i++) {
-            
+            boardgame[i].setSetted(false);
             if (boardgame[i].getPiece() != null) {
                 boardgame[i].getPiece().select = fals;
-                boardgame[i].set = fals;
+                boardgame[i].getPiece().atacked = fals;
             }
             if (boardgame[i].calcDistance(x, y)) {
                 if (boardgame[i].getPiece() != null) {
                     boardgame[i].getPiece().select = tru;
-
+                    selectedPiece = boardgame[i].getPiece();
+                    valor = i;
                 }
             }
         }
+        selectedPiece.move(valor);
+        constRender(context, invertido);
 
     })
 }
