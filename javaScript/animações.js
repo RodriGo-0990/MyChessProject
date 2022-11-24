@@ -18,7 +18,7 @@ class casas {
         this.x = x;
         this.y = y;
         this.width = 33;
-        this.height = 17;
+        this.height = 16;
         this.isFill = false;
         this.piece = null;
         this.set = false;
@@ -142,7 +142,7 @@ function constRender(ctx, inv) {
             boardgame[i].printFull(ctx, colorgreen);
         }
     }
-}
+} 
 
 function movement(value) {
     if (value < boardgame.length) {
@@ -152,6 +152,7 @@ function movement(value) {
             boardgame[value].getPiece().atacked = true;
         }
     }
+    console.log(boardgame[value].x)
 }
 
 class piece {
