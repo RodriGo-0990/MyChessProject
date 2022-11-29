@@ -7,6 +7,7 @@ let casa = 0;
 let invertido;
 let fals = false;
 let tru = true;
+let selectedPiece;
 const colorgreen = "#70f24885";
 const colorred = "#cb343475";
 const colorgrey = "#6d6315b5";
@@ -53,8 +54,60 @@ class casas {
             return false;
         }
     }
+    calcBoundery() {
+        var left = this.x
+        var right = this.x + (this.width);
+        var top = this.y;
+        var bottom = this.y + (this.height);
+
+
+        if (left - 1 < 0 ||
+            right + 5 > 300 ||
+            top - 1 < 0 ||
+            bottom + 10 > 150) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    bounderyLeft() {
+        var left = this.x;
+        if (left - 1 < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    bounderyRight() {
+        var right = this.x + (this.width);
+        if (right + 5 > 300) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    bounderyTop() {
+        var top = this.y;
+        if (top - 1 < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    bounderyBottom() {
+        var bottom = this.y + (this.height);
+        if (bottom + 10 > 150) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     setSetted(set) {
         this.set = set;
+    }
+    getSetted() {
+        return this.set;
     }
     isFilled() {
         return this.isFill;
@@ -114,8 +167,8 @@ function render(ctx, invertido) {
     boardgame[27].placePiece(new whiteKnight(boardgame[27].x, boardgame[27].y)); boardgame[27].getPiece().printPiece(ctx, invertido);
     boardgame[58].placePiece(new whiteBishop(boardgame[58].x, boardgame[58].y)); boardgame[58].getPiece().printPiece(ctx, invertido);
     boardgame[59].placePiece(new whiteQueen(boardgame[59].x, boardgame[59].y)); boardgame[59].getPiece().printPiece(ctx, invertido);
-    boardgame[60].placePiece(new whiteKing(boardgame[60].x, boardgame[60].y)); boardgame[60].getPiece().printPiece(ctx, invertido);
-    boardgame[35].placePiece(new whiteBishop(boardgame[35].x, boardgame[35].y)); boardgame[35].getPiece().printPiece(ctx, invertido);
+    boardgame[47].placePiece(new whiteKing(boardgame[47].x, boardgame[47].y)); boardgame[47].getPiece().printPiece(ctx, invertido);
+    boardgame[37].placePiece(new whiteBishop(boardgame[37].x, boardgame[37].y)); boardgame[37].getPiece().printPiece(ctx, invertido);
     boardgame[62].placePiece(new whiteKnight(boardgame[62].x, boardgame[62].y)); boardgame[62].getPiece().printPiece(ctx, invertido);
     boardgame[30].placePiece(new whiteCastle(boardgame[30].x, boardgame[30].y)); boardgame[30].getPiece().printPiece(ctx, invertido);
 
@@ -142,7 +195,7 @@ function constRender(ctx, inv) {
             boardgame[i].printFull(ctx, colorgreen);
         }
     }
-} 
+}
 
 function movement(value) {
     if (value < boardgame.length) {
@@ -152,7 +205,6 @@ function movement(value) {
             boardgame[value].getPiece().atacked = true;
         }
     }
-    console.log(boardgame[value].x)
 }
 
 class piece {
@@ -195,6 +247,9 @@ class whiteCastle extends piece {
     getAtacked() {
         return this.atacked;
     }
+    getTeam() {
+        return this.team;
+    }
     printPiece(ctx, inv) {
         var image = new Image();
         image.src = "img/peças_brancas/white_Castle.ico";
@@ -205,10 +260,26 @@ class whiteCastle extends piece {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
     move(value) {
-        movement(value + 1);
-        movement(value - 1);
-        movement(value + 8);
-        movement(value - 8);
+        var initial = value;
+        while (!boardgame[value].bounderyRight()) {
+            value++;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyLeft()) {
+            value--;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyBottom()) {
+            value += 8;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyTop()) {
+            value -= 8;
+            movement(value)
+        }
     }
 }
 
@@ -226,6 +297,9 @@ class whiteKing extends piece {
     getAtacked() {
         return this.atacked;
     }
+    getTeam() {
+        return this.team;
+    }
     printPiece(ctx, inv) {
         var image = new Image();
         image.src = "img/peças_brancas/white_King.ico";
@@ -237,14 +311,46 @@ class whiteKing extends piece {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
     move(value) {
-        movement(value + 1);
-        movement(value - 1);
-        movement(value + 8);
-        movement(value - 8);
-        movement(value + 7);
-        movement(value - 7);
-        movement(value + 9);
-        movement(value - 9);
+        var initial = value;
+        if (!boardgame[value].bounderyRight()) {
+            value++;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].bounderyLeft()) {
+            value--;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].bounderyBottom()) {
+            value += 8;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].bounderyTop()) {
+            value -= 8;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].bounderyTop()) {
+            value -= 9;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].bounderyTop()) {
+            value -= 7;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].calcBoundery()) {
+            value += 9;
+            movement(value)
+        }
+        value = initial;
+        if (!boardgame[value].bounderyRight()) {
+            value += 7;
+            movement(value)
+        }
     }
 }
 class whiteBishop extends piece {
@@ -253,12 +359,16 @@ class whiteBishop extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 1;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        this.team = 1;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -270,12 +380,28 @@ class whiteBishop extends piece {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
     move(value) {
-        movement(value + 7);
-        movement(value - 7);
-        movement(value + 9);
-        movement(value - 9);
-    }
+        var initial = value;
+        while (!boardgame[value].calcBoundery()) {
+            value += 7;
+            movement(value);
+        }
+        value = initial;
+        while (!boardgame[value].calcBoundery()) {
+            value += 9;
+            movement(value);
+        }
+        value = initial;
+        while (!boardgame[value].calcBoundery()) {
+            value -= 7;
+            movement(value);
+        }
+        value = initial;
+        while (!boardgame[value].calcBoundery()) {
+            value -= 9;
+            movement(value);
+        }
 
+    }
 }
 class whiteKnight extends piece {
     super(x, y) {
@@ -283,12 +409,16 @@ class whiteKnight extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 1;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -317,12 +447,16 @@ class whiteQueen extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 1;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -334,15 +468,46 @@ class whiteQueen extends piece {
         ctx.clearRect(this.x, this.y, 35, 18);
     }
     move(value) {
-
-        movement(value + 1);
-        movement(value - 1);
-        movement(value + 8);
-        movement(value - 8);
-        movement(value + 7);
-        movement(value - 7);
-        movement(value + 9);
-        movement(value - 9);
+        var initial = value;
+        while (!boardgame[value].bounderyRight()) {
+            value++;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyLeft()) {
+            value--;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyBottom()) {
+            value += 8;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyTop()) {
+            value -= 8;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].calcBoundery()) {
+            value -= 9;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].calcBoundery()) {
+            value -= 7;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyBottom()) {
+            value += 9;
+            movement(value)
+        }
+        value = initial;
+        while (!boardgame[value].bounderyBottom()) {
+            value += 7;
+            movement(value)
+        }
     }
 }
 class whitePone extends piece {
@@ -352,12 +517,16 @@ class whitePone extends piece {
         this.select = false;
         this.atacked = false;
         this.firstMove = true;
+        this.team = 1;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -384,12 +553,16 @@ class blackCastle extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 0;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -407,12 +580,16 @@ class blackKing extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 0;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -430,12 +607,16 @@ class blackBishop extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 0;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -453,12 +634,16 @@ class blackKnight extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 0;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -476,12 +661,16 @@ class blackQueen extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 0;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -499,12 +688,16 @@ class blackPone extends piece {
         this.y = y;
         this.select = false;
         this.atacked = false;
+        this.team = 0;
     }
     getSelect() {
         return this.select;
     }
     getAtacked() {
         return this.atacked;
+    }
+    getTeam() {
+        return this.team;
     }
     printPiece(ctx, inv) {
         var image = new Image();
@@ -564,14 +757,13 @@ function play() {
             }
         }
     })
-    let selectedPiece;
+
     let valor;
     //select
     canvas.addEventListener("click", (event) => {
         const rect = canvas.getBoundingClientRect();
         let x = (event.clientX - rect.left) * canvas.width / rect.width;
         let y = (event.clientY - rect.top) * canvas.height / rect.height;
-
 
         for (i = 0; i < boardgame.length; i++) {
             boardgame[i].setSetted(false);
@@ -585,10 +777,30 @@ function play() {
                     selectedPiece = boardgame[i].getPiece();
                     valor = i;
                 }
+
+            } if (boardgame[i].getSetted()) {
+                console.log(boardgame[i])
             }
         }
         selectedPiece.move(valor);
         constRender(context, invertido);
+
+    })
+    //mover
+    canvas.addEventListener("click", (event) => {
+        const rect = canvas.getBoundingClientRect();
+        let x = (event.clientX - rect.left) * canvas.width / rect.width;
+        let y = (event.clientY - rect.top) * canvas.height / rect.height;
+
+        for (i = 0; i < boardgame.length; i++) {
+            if (boardgame[i].calcDistance(x, y)) {
+             if (boardgame[i].getSetted()) {
+               console.log("clicado")
+            }
+        }
+        }
+        constRender(context, invertido);
+
 
     })
 }
